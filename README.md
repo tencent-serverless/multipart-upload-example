@@ -1,6 +1,6 @@
 # Tencent Serverless 处理 multipart 多文件上传 example
 
-(最终效果)[https://service-b4h5rq0c-1256777886.gz.apigw.tencentcs.com/release/multipart-test]
+[最终效果](https://service-55o5m2vg-1256777886.gz.apigw.tencentcs.com/release/multipart-upload-example)
 
 通过腾讯云 Serverless 处理 multipart 多文件上传的 HTTP 请求，原理上需要利用 API 网关的 base64 编码能力，将字节流编码为字符串，以便将 HTTP Event 传入 SCF 云函数进行处理。
 
@@ -126,4 +126,4 @@ exports.main_handler = async (event, context) => {
 
 打开并发布服务后，我们的服务就可以正确工作了。
 
-https://service-55o5m2vg-1256777886.gz.apigw.tencentcs.com/release/multipart-upload-example
+[最终效果](https://service-55o5m2vg-1256777886.gz.apigw.tencentcs.com/release/multipart-upload-example)
