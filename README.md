@@ -1,8 +1,8 @@
-# Tencent Serverless 处理 multipart 多文件上传 example
+# Tencent Serverless 处理 multipart/form-data 多文件上传 example
 
 [最终效果](https://service-55o5m2vg-1256777886.gz.apigw.tencentcs.com/release/multipart-upload-example)
 
-通过腾讯云 Serverless 处理 multipart 多文件上传的 HTTP 请求，原理上需要利用 API 网关的 base64 编码能力，将字节流编码为字符串，以便将 HTTP Event 传入 SCF 云函数进行处理。
+通过腾讯云 Serverless 处理 multipart/form-data 多文件上传的 HTTP 请求，原理上需要利用 API 网关的 base64 编码能力，将原始 HTTP 请求中的 multipart 字节流编码为字符串，以便将 HTTP Event 序列化，传入 SCF 云函数进行处理。
 
 云函数将 API 网关传来 event 中的 body 获取并解码 base64 后，生成的字节流则与普通 HTTP 请求中的无异，正常处理即可。在 Node.JS 中，我们可以利用 `busboy` 等库进行处理。
 
@@ -21,7 +21,7 @@
 
 ### 编写代码并部署
 
-云函数创建完成后，我们还没有编写处理 formdata 的具体逻辑。我们将以下代码粘贴到 CloudStudio 中（当然，您也可以编写自己的逻辑，进行具体的处理）
+云函数创建完成后，我们还没有编写处理 multipart/form-data 的具体逻辑。我们将以下代码粘贴到 CloudStudio 中（当然，您也可以编写自己的逻辑，进行具体的处理）
 
 ```js
 // handler.js
@@ -48,7 +48,7 @@ const handlePost = (event) => {
         html += `<img src="data:${mimetype};base64, ${imgBase64}" />`;
       });
     });
-    /** multipart formdata 接受完毕，构造并返回生成的 html */
+    /** multipart/form-data 接受完毕，构造并返回生成的 html */
     busboy.on("finish", function () {
       console.log({ msg: "Parse form complete!", html });
       resolve({
@@ -94,7 +94,7 @@ const handleGet = (event) => {
 /** 云函数入口函数 */
 exports.main_handler = async (event, context) => {
   const method = event.httpMethod;
-  /** 当请求为 POST 请求时，我们处理用户的 multipart formdata，并生成展示上传结果的页面 */
+  /** 当请求为 POST 请求时，我们处理用户的 multipart/form-data，并生成展示上传结果的页面 */
   if (method === "POST") {
     return handlePost(event);
   }
@@ -105,7 +105,7 @@ exports.main_handler = async (event, context) => {
 };
 ```
 
-编写代码后，您也可以为云函数安装运行时需要的依赖，例如，我们这里利用 busboy 帮助我们进行 multipart 数据的解码。(注意：依赖要安装在 src 文件夹下)
+编写代码后，您也可以为云函数安装运行时需要的依赖，例如，我们这里利用 busboy 帮助我们进行 multipart/form-data 数据的解码。(注意：依赖要安装在 src 文件夹下)
 
 ![](./img/install-busboy.png)
 
